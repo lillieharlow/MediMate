@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:7
+    container_name: medimate-mongo-dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+  backend:
+    build:
+      context: ./MediMate-Back-End-Web-App
+      dockerfile: Dockerfile.dev
+    container_name: medimate-backend-dev
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./MediMate-Back-End-Web-App/.env.dev
+    depends_on:
+      - mongo
+    restart: unless-stopped
+  frontend:
+    build:
+      context: ./MediMate-Front-End-Web-App
+      dockerfile: Dockerfile.dev
+    container_name: medimate-frontend-dev
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./MediMate-Front-End-Web-App/.env.dev
+    depends_on:
+      - backend
+    restart: unless-stopped
+volumes:
+  mongo-data:

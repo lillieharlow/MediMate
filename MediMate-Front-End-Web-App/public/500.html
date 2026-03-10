@@ -1,0 +1,48 @@
+<!--
+  500.html
+  - Static error page for 500 Internal Server Error.
+  - This page can be served directly by the hosting provider when the server is unavailable.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>500 - Internal Server Error</title>
+  <style>
+    body {
+      background: #f8f9fa;
+      color: #222;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 2rem 3rem;
+      text-align: center;
+      max-width: 400px;
+    }
+    h1 {
+      color: #d32f2f;
+      margin-bottom: 1rem;
+    }
+    p {
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>500 - Internal Server Error</h1>
+    <p>Oops! Something went wrong on our end.<br />Please try again later or contact support if the issue persists.</p>
+  </div>
+</body>
+</html>

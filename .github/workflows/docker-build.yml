@@ -1,0 +1,25 @@
+name: Build and Tag Docker Images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get version
+        run: echo "APP_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+
+      - name: Build dev
+        run: docker build -f Dockerfile.dev -t medimate-backend:${APP_VERSION}-dev .
+
+      - name: Build test
+        run: docker build -f Dockerfile.test -t medimate-backend:${APP_VERSION}-test .
+
+      - name: Build prod
+        run: docker build -f Dockerfile.prod -t medimate-backend:${APP_VERSION}-prod .
