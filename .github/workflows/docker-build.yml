@@ -1,4 +1,4 @@
-name: Build and Tag Docker Images
+name: Build Docker Images for DevOps Assessment 1
 
 on:
   push:
@@ -12,14 +12,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Inject backend secret
+        run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > MediMate-Back-End-Web-App/.env.prod
+
+      - name: Inject frontend secret
+        run: echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" > MediMate-Front-End-Web-App/.env.prod
+
       - name: Get version
         run: echo "APP_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
 
-      - name: Build dev
-        run: docker build -f Dockerfile.dev -t medimate-backend:${APP_VERSION}-dev .
+      - name: Build dev image
+        run: docker build -f MediMate-Back-End-Web-App/Dockerfile.dev -t medimate-backend:${APP_VERSION}-dev MediMate-Back-End-Web-App
 
-      - name: Build test
-        run: docker build -f Dockerfile.test -t medimate-backend:${APP_VERSION}-test .
+      - name: Build test image
+        run: docker build -f MediMate-Back-End-Web-App/Dockerfile.test -t medimate-backend:${APP_VERSION}-test MediMate-Back-End-Web-App
 
-      - name: Build prod
-        run: docker build -f Dockerfile.prod -t medimate-backend:${APP_VERSION}-prod .
+      - name: Build prod image
+        run: docker build -f MediMate-Back-End-Web-App/Dockerfile.prod -t medimate-backend:${APP_VERSION}-prod MediMate-Back-End-Web-App
+
+      - name: Build dev frontend image
+        run: docker build -f MediMate-Front-End-Web-App/Dockerfile.dev -t medimate-frontend:${APP_VERSION}-dev MediMate-Front-End-Web-App
+
+      - name: Build test frontend image
+        run: docker build -f MediMate-Front-End-Web-App/Dockerfile.test -t medimate-frontend:${APP_VERSION}-test MediMate-Front-End-Web-App
+
+      - name: Build prod frontend image
+        run: docker build -f MediMate-Front-End-Web-App/Dockerfile.prod -t medimate-frontend:${APP_VERSION}-prod MediMate-Front-End-Web-App
