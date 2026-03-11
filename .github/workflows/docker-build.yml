@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Get app version
-        run: echo "APP_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+        run: echo "APP_VERSION=$(jq -r '.version' MediMate-Back-End-Web-App/package.json)" >> $GITHUB_ENV
 
       - name: Inject backend secrets
         run: |
