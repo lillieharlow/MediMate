@@ -3,6 +3,9 @@ services:
   mongo:
     image: mongo:7
     container_name: medimate-mongo-prod
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+    restart: unless-stopped
     ports: []
     volumes:
       - mongo-data:/data/db
