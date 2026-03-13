@@ -1,9 +1,17 @@
 # syntax=docker/dockerfile:1
 
+# Use Node.js 20 Alpine image for test environment
 FROM node:20-alpine
+
+# Set working directory inside the container
 WORKDIR /app
+
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm ci
+
+# Copy the rest of the application code
 COPY . .
-ENV NODE_ENV=test
+
+# Start the test suite (.env variables provided by Docker Compose env_file)
 CMD ["npm", "test"]

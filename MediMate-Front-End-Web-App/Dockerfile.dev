@@ -1,10 +1,20 @@
 # syntax=docker/dockerfile:1
 
+# Use Node.js 20 Alpine image for dev environment
 FROM node:20-alpine
+
+# Set working directory inside the container
 WORKDIR /app
+
+# Copy package files and install dependencies
 COPY package*.json ./
 RUN npm ci
+
+# Copy the rest of the application code
 COPY . .
-ENV NODE_ENV=development
+
+# Expose the Vite dev server port
 EXPOSE 5173
+
+# Start the Vite dev server (.env variables provided by Docker Compose env_file)
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
