@@ -1,0 +1,12 @@
+# Environment / secrets
+.env
+.env.*
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+coverage/
+*.log
