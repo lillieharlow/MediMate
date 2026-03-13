@@ -8,6 +8,7 @@ services:
     volumes:
       - mongo-data:/data/db
   backend:
+    image: medimate-backend:${APP_VERSION}-${ENVIRONMENT}
     build:
       context: ./MediMate-Back-End-Web-App
       dockerfile: Dockerfile.dev
@@ -20,6 +21,7 @@ services:
       - mongo
     restart: unless-stopped
   frontend:
+    image: medimate-frontend:${APP_VERSION}-${ENVIRONMENT}
     build:
       context: ./MediMate-Front-End-Web-App
       dockerfile: Dockerfile.dev
