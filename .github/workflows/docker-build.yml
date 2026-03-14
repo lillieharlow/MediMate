@@ -15,8 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get app version
-        run: echo "APP_VERSION=$(jq -r '.version' MediMate-Back-End-Web-App/package.json)" >> $GITHUB_ENV
+      - name: Load app version from root .env
+        run: |
+          if [ -f .env ]; then
+            export $(grep -v '^#' .env | xargs)
+            echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+            echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
+          else
+            echo ".env file not found!" && exit 1
+          fi
 
       - name: Inject backend secrets
         run: |
@@ -32,21 +39,9 @@ jobs:
           echo "NODE_ENV=prod" >> MediMate-Front-End-Web-App/.env.prod
           echo "PORT=5173" >> MediMate-Front-End-Web-App/.env.prod
           echo "APP_VERSION=${{ env.APP_VERSION }}" >> MediMate-Front-End-Web-App/.env.prod
-
-      - name: Build dev backend image
-        run: docker build -f MediMate-Back-End-Web-App/Dockerfile.dev -t medimate-backend:${{ env.APP_VERSION }}-dev MediMate-Back-End-Web-App
-
-      - name: Build test backend image
-        run: docker build -f MediMate-Back-End-Web-App/Dockerfile.test -t medimate-backend:${{ env.APP_VERSION }}-test MediMate-Back-End-Web-App
-
+          
       - name: Build prod backend image
         run: docker build -f MediMate-Back-End-Web-App/Dockerfile.prod -t medimate-backend:${{ env.APP_VERSION }}-prod MediMate-Back-End-Web-App
-
-      - name: Build dev frontend image
-        run: docker build -f MediMate-Front-End-Web-App/Dockerfile.dev -t medimate-frontend:${{ env.APP_VERSION }}-dev MediMate-Front-End-Web-App
-
-      - name: Build test frontend image
-        run: docker build -f MediMate-Front-End-Web-App/Dockerfile.test -t medimate-frontend:${{ env.APP_VERSION }}-test MediMate-Front-End-Web-App
 
       - name: Build prod frontend image
         run: docker build -f MediMate-Front-End-Web-App/Dockerfile.prod -t medimate-frontend:${{ env.APP_VERSION }}-prod MediMate-Front-End-Web-App
