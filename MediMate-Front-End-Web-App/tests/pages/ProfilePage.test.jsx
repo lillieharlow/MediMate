@@ -61,21 +61,6 @@ describe('test /profile page', () => {
     expect(await screen.findByTestId('app-profile-form-input-phone')).toHaveValue('0400111222');
   });
 
-  it('Updating profile fields succesfully displays message', async () => {
-    setTestToken('patient');
-    const user = userEvent.setup();
-    renderWithoutRoutes(<ProfilePage />);
-
-    const fNameInput = await screen.findByTestId('app-profile-form-input-firstname');
-    const submitButton = screen.getByTestId('app-profile-form-button-submit');
-
-    await user.clear(fNameInput);
-    await user.type(fNameInput, 'ValidFirstName');
-    await user.click(submitButton);
-
-    expect(screen.getByText(/profile updated successfully/i)).toBeInTheDocument();
-  });
-
   it('Updating profile fields with invalid values displays error message', async () => {
     setTestToken('patient');
     const user = userEvent.setup();

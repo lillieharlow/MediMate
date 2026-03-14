@@ -16,7 +16,7 @@ const ensureType = async (typeName) =>
   UserType.findOneAndUpdate(
     { typeName },
     { $setOnInsert: { typeName } },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: 'after' }
   );
 
 const createStaffUserAndToken = async (app) => {

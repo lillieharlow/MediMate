@@ -7,16 +7,16 @@
  * Sets JWT_SECRET=test-secret for auth route tests.
  */
 
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const path = require('node:path');
 const mongoose = require('mongoose');
 const { seedUserTypes } = require('../src/utils/seedDatabase');
 
-let mongo;
+// eslint-disable-next-line import/no-extraneous-dependencies
+require('dotenv').config({ path: path.resolve(__dirname, '../.env.test') });
 
 beforeAll(async () => {
-  process.env.JWT_SECRET = 'test-secret';
-  mongo = await MongoMemoryServer.create();
-  await mongoose.connect(mongo.getUri());
+  // JWT_SECRET and other env vars are now loaded from .env.test
+  await mongoose.connect(process.env.MONGODB_URI);
 });
 beforeEach(async () => {
   await mongoose.connection.db.dropDatabase();
@@ -24,7 +24,6 @@ beforeEach(async () => {
 });
 afterAll(async () => {
   await mongoose.disconnect();
-  await mongo.stop();
 });
 
 const testData = {

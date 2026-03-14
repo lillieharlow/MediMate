@@ -165,7 +165,7 @@ router.post(
     const userTypeObj = await UserType.findOneAndUpdate(
       { typeName: userType },
       { $setOnInsert: { typeName: userType } },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
 
     const user = new User({ email, hashedPassword, userType: userTypeObj._id });

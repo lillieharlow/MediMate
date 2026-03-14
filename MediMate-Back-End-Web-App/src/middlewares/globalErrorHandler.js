@@ -23,24 +23,38 @@ const globalErrorHandler = (error, response, next) => {
 
   const status = errorStatusMap[error.name] || error.status || error.statusCode || 500;
 
+  // Always provide a string message for error responses
+    let message = 'Internal Server Error';
+    if (error && typeof error.message === 'string' && error.message.trim()) {
+      message = error.message;
+    } else if (error && typeof error === 'string' && error.trim()) {
+      message = error;
+    }
+
   const errorResponse = {
     success: false,
     status,
-    message: error.message || 'Internal Server Error',
+    message,
     timestamp: new Date().toISOString(),
   };
 
-  if (error.name === 'ValidationError') {
+  // Always provide errors as an array if present
+  if (error.name === 'ValidationError' && error.errors) {
     errorResponse.errors = Object.values(error.errors).map((err) => ({
       field: err.path,
       message: err.message,
     }));
-  } else if (error.errors && Array.isArray(error.errors)) {
+  } else if (Array.isArray(error.errors)) {
     errorResponse.errors = error.errors;
   }
 
-  console.error(`[${errorResponse.timestamp}] Error (${error.name}):`, error.stack);
+  // Log the error for debugging
+  console.error(
+    `[${errorResponse.timestamp}] Error (${error.name || 'UnknownError'}):`,
+    error.stack || error
+  );
 
+  // Always return JSON with a message
   return response.status(status).json(errorResponse);
 };
 

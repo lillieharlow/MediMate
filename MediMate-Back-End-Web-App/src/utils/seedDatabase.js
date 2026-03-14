@@ -23,7 +23,7 @@ const seedUserTypes = async () => {
       const exists = await UserType.findOne({ typeName: type });
       if (!exists) {
         await UserType.create({ typeName: type });
-        console.log(`Created UserType: ${type}`);
+        // console.log(`Created UserType: ${type}`);
       }
     })
   );

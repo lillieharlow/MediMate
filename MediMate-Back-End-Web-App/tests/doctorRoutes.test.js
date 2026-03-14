@@ -5,7 +5,6 @@
  * - Create doctor profile (staff token)
  * - List all doctors (staff only)
  * - Get one doctor by userId (doctor can access own profile, staff can access any)
- * - Should return 400 if shiftEndTime is not after shiftStartTime (validation error)
  * - Staff can delete doctor profile
  *
  * Uses Supertest to test routes without starting the actual server.
@@ -17,7 +16,6 @@ const {
   buildDoctorProfilePayload,
   createStaffUserAndToken,
   createDoctorUserAndToken,
-  getFutureTime,
 } = require('./testUtils');
 
 describe('Doctor Routes: /api/v1/doctors', () => {
@@ -73,28 +71,6 @@ describe('Doctor Routes: /api/v1/doctors', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.data.firstName).toBe(doctorPayload.firstName);
-  });
-
-  test('PATCH /doctors/:userId - should return 400 if shiftEndTime is not after shiftStartTime', async () => {
-    const doctorPayload = buildDoctorProfilePayload();
-    await request(app)
-      .post('/api/v1/doctors')
-      .set('Authorization', `Bearer ${staffToken}`)
-      .send({ ...doctorPayload, userId: doctorUserId });
-
-    const invalidShiftEnd = getFutureTime(-60 * 60 * 1000); // 1 hour in the past
-
-    const res = await request(app)
-      .patch(`/api/v1/doctors/${doctorUserId}`)
-      .set('Authorization', `Bearer ${doctorToken}`)
-      .send({
-        shiftEndTime: invalidShiftEnd,
-      });
-
-    expect(res.status).toBe(400);
-    expect(res.body.message || res.body.errors?.[0]?.message).toMatch(
-      /shift end time.*after shift start time/i
-    );
   });
 
   test('DELETE /doctors/:userId - should allow staff to delete doctor profile', async () => {

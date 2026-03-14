@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+  # MongoDB service for development
   mongo:
     image: mongo:7
     container_name: medimate-mongo-dev
@@ -7,6 +8,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+
+  # Backend service for development
   backend:
     image: medimate-backend:${APP_VERSION}-${ENVIRONMENT}
     build:
@@ -20,6 +23,8 @@ services:
     depends_on:
       - mongo
     restart: unless-stopped
+    
+  # Frontend service for development
   frontend:
     image: medimate-frontend:${APP_VERSION}-${ENVIRONMENT}
     build:

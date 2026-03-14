@@ -84,7 +84,7 @@ const updateProfile = async (Model, userId, updateData) => {
     validateDoctorShiftTimes(start, end);
   }
   const updated = await Model.findOneAndUpdate({ user: userId }, updateData, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true,
   }).populate({
     path: 'user',

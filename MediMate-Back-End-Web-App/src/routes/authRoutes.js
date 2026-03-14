@@ -64,7 +64,7 @@ router.post(
     const patientType = await UserType.findOneAndUpdate(
       { typeName: 'patient' },
       { $setOnInsert: { typeName: 'patient' } },
-      { upsert: true, new: true }
+      { upsert: true, returnDocument: 'after' }
     );
 
     const user = new User({ email, hashedPassword, userType: patientType._id });
