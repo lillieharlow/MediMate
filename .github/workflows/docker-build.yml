@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Load app version from root .env
         run: |
@@ -39,7 +39,7 @@ jobs:
           echo "NODE_ENV=prod" >> MediMate-Front-End-Web-App/.env.prod
           echo "PORT=5173" >> MediMate-Front-End-Web-App/.env.prod
           echo "APP_VERSION=${{ env.APP_VERSION }}" >> MediMate-Front-End-Web-App/.env.prod
-          
+
       - name: Build prod backend image
         run: docker build -f MediMate-Back-End-Web-App/Dockerfile.prod -t medimate-backend:${{ env.APP_VERSION }}-prod MediMate-Back-End-Web-App
 
