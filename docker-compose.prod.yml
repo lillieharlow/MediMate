@@ -1,27 +1,33 @@
 version: '3.8'
 services:
+  # MongoDB service for production
   mongo:
     image: mongo:7
     container_name: medimate-mongo-prod
     environment:
       - MONGODB_URI=${MONGODB_URI}
     restart: unless-stopped
-    ports: []
+    ports:
+      - "27017:27017"
     volumes:
       - mongo-data:/data/db
+  
+  # Backend service for production
   backend:
     image: medimate-backend:${APP_VERSION}-${ENVIRONMENT}
     build:
       context: ./MediMate-Back-End-Web-App
       dockerfile: Dockerfile.prod
     container_name: medimate-backend-prod
+    ports:
+      - "5000:5000"
     env_file:
       - ./MediMate-Back-End-Web-App/.env.prod
-    environment:
-      JWT_SECRET: ${JWT_SECRET}
     restart: unless-stopped
     depends_on:
       - mongo
+
+  # Frontend service for production    
   frontend:
     image: medimate-frontend:${APP_VERSION}-${ENVIRONMENT}
     build:
@@ -34,8 +40,6 @@ services:
       - "80:80"
     env_file:
       - ./MediMate-Front-End-Web-App/.env.prod
-    environment:
-      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     depends_on:
       - backend
     restart: unless-stopped

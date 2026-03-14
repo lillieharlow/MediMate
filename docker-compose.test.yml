@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+# MongoDB service for testing
   mongo:
     image: mongo:7
     container_name: medimate-mongo-test
@@ -7,6 +8,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+
+  # Backend service for testing
   backend-test:
     build:
       context: ./MediMate-Back-End-Web-App
@@ -18,6 +21,8 @@ services:
     depends_on:
       - mongo
     restart: "no"
+    
+  # Frontend service for testing
   frontend-test:
     build:
       context: ./MediMate-Front-End-Web-App

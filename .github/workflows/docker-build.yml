@@ -22,24 +22,24 @@ jobs:
         run: |
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" > MediMate-Back-End-Web-App/.env.prod
           echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> MediMate-Back-End-Web-App/.env.prod
-          echo "NODE_ENV=production" >> MediMate-Back-End-Web-App/.env.prod
+          echo "NODE_ENV=prod" >> MediMate-Back-End-Web-App/.env.prod
           echo "PORT=5000" >> MediMate-Back-End-Web-App/.env.prod
           echo "APP_VERSION=${{ env.APP_VERSION }}" >> MediMate-Back-End-Web-App/.env.prod
 
       - name: Inject frontend secrets
         run: |
           echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" > MediMate-Front-End-Web-App/.env.prod
-          echo "NODE_ENV=production" >> MediMate-Front-End-Web-App/.env.prod
+          echo "NODE_ENV=prod" >> MediMate-Front-End-Web-App/.env.prod
           echo "PORT=5173" >> MediMate-Front-End-Web-App/.env.prod
           echo "APP_VERSION=${{ env.APP_VERSION }}" >> MediMate-Front-End-Web-App/.env.prod
 
-      - name: Build dev image
+      - name: Build dev backend image
         run: docker build -f MediMate-Back-End-Web-App/Dockerfile.dev -t medimate-backend:${{ env.APP_VERSION }}-dev MediMate-Back-End-Web-App
 
-      - name: Build test image
+      - name: Build test backend image
         run: docker build -f MediMate-Back-End-Web-App/Dockerfile.test -t medimate-backend:${{ env.APP_VERSION }}-test MediMate-Back-End-Web-App
 
-      - name: Build prod image
+      - name: Build prod backend image
         run: docker build -f MediMate-Back-End-Web-App/Dockerfile.prod -t medimate-backend:${{ env.APP_VERSION }}-prod MediMate-Back-End-Web-App
 
       - name: Build dev frontend image

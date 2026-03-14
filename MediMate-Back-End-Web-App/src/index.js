@@ -45,12 +45,16 @@ const app = express();
 app.use(require('helmet')());
 app.use(
   require('cors')({
-    origin: ['http://localhost:3000', 'http://localhost:5173'],
+    origin: [
+      'http://localhost',
+      'http://localhost:5173',
+      // 'https://your-production-frontend-url.com' // Uncomment and set when deployed
+    ],
     optionsSuccessStatus: 200,
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: false,
+    credentials: true, // Allow cookies/auth headers
   })
-); // Add render URL when deployed
+); // Add production URL above when deployed
 
 app.use(express.json());
 
