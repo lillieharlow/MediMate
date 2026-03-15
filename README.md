@@ -105,6 +105,6 @@ To stop all containers, press `Ctrl+C` in the terminal, then run:
 ## 8. CI/CD Workflow
 This project uses GitHub Actions for CI/CD. On every push to the main branch:
 - Secrets are injected into the backend and frontend `.env.prod` files using GitHub repository secrets.
-- Production Docker images are built for both backend and frontend, tagged with the version from the root `.env` file.
+- Production Docker images are built for both backend and frontend, tagged with the version from their `package.json` files.
 - No secrets are ever committed to the repository; they are only present at build time in the CI environment.
 - The workflow file is located at `.github/workflows/docker-build.yml`.
